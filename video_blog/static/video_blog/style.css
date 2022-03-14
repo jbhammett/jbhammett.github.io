@@ -1,0 +1,28 @@
+.post_listing{
+	margin-top: 10px;
+	border-style: solid;
+	border-color: lightgray;
+	border-width: thin;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+
+.edit{
+	display: inline-block;
+}
+
+
+.timestamp{
+    color: DarkGray;
+}
+
+
+.user{
+	margin-bottom: 0px;
+}
+
+.video-size{
+    max-width: 800px;
+}
+
