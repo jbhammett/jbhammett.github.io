@@ -1,0 +1,75 @@
+
+{% extends "video_blog/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<h4>{{ profile_user }} </h4>
+
+{% for post in page_obj %}
+    <div class="post_listing">
+        <b><a class="user" href="{% url 'profile' post.author.id %}">{{ post.author }}</a></b>
+        <br>
+        <div class="video-size">
+            <div class="embed-responsive embed-responsive-21by9">
+                <video class="embed-responsive-item" controls>
+                    <source src="{{ MEDIA_URL }}{{ post.video }}" type='video/mp4'>
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
+        <div data-post="{{ post.id }}" class="post_body">{{ post.content }}</div>
+        <br>
+        <span class="timestamp">{{ post.timestamp|date:"DATETIME_FORMAT" }}</span>
+        <br>
+        <form data-post="{{ post.id }}" class="edit_body">
+            {% csrf_token %}
+            <textarea data-post="{{ post.id }}" class="new_body">{{ post.content }}</textarea>
+            <br>
+            <input data-post="{{ post.id }}" class="btn submit_edit" type="button" value="Submit">
+        </form>
+      {%if user.is_authenticated %}
+
+            {% if request.user == post.author %}
+                <button data-post="{{ post.id }}" class="btn btn-link edit">Edit</button>            
+            {% endif %} 
+            <span class="like_count" data-post="{{ post.id }}">{{ post.user_likes.count }}</span> Likes         
+            {% if post in liked_posts %}
+                <button data-liked = "1" data-post="{{ post.id }}" class="btn btn-link like">Unlike</button>
+            {% else %}
+                <button data-liked = "0" data-post="{{ post.id }}" class="btn btn-link like">Like</button>
+            {% endif %}
+        {% endif %}
+    </div>
+{% empty %}
+    <li>No posts yet!</li>
+{% endfor %}
+
+
+<nav aria-label="all_posts">
+    <span class="step-links pagination">
+        <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+        {% endif %}
+    </ul>
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+    </span>
+</nav>
+
+
+{% endblock %}
+
+
+{% block script %}
+    <script src="{% static 'video_blog/social.js' %}"></script>
+{% endblock %}

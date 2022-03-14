@@ -1,0 +1,16 @@
+{% extends "video_blog/layout.html" %}
+
+{% block body %}
+<h2>Categories</h2>
+	<ul>
+	{% for category in categories %}
+		{% if category.name %}
+			<li><a href="{% url 'category_posts' category.id %}">{{ category.name|title }}</a></li>
+		{% endif %}
+	{% empty %}
+		<li>No active categories.</li>
+	{% endfor %}
+	<ul>
+
+
+{% endblock %}
